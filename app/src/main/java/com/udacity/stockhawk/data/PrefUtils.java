@@ -16,6 +16,7 @@ public final class PrefUtils {
     }
 
     public static Set<String> getStocks(Context context) {
+
         String stocksKey = context.getString(R.string.pref_stocks_key);
         String initializedKey = context.getString(R.string.pref_stocks_initialized_key);
         String[] defaultStocksList = context.getResources().getStringArray(R.array.default_stocks);
@@ -38,6 +39,7 @@ public final class PrefUtils {
     }
 
     private static void editStockPref(Context context, String symbol, Boolean add) {
+
         String key = context.getString(R.string.pref_stocks_key);
         Set<String> stocks = getStocks(context);
 
@@ -51,6 +53,7 @@ public final class PrefUtils {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putStringSet(key, stocks);
         editor.apply();
+
     }
 
     public static void addStock(Context context, String symbol) {

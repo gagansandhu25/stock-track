@@ -4,6 +4,7 @@ package com.udacity.stockhawk.ui;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 
 class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
+    private static final String TAG = "StockAdapter";
     private final Context context;
     private final DecimalFormat dollarFormatWithPlus;
     private final DecimalFormat dollarFormat;
@@ -128,11 +130,11 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             cursor.moveToPosition(adapterPosition);
+            Log.d(TAG, "onClick: " + cursor);
             int symbolColumn = cursor.getColumnIndex(Contract.Quote.COLUMN_SYMBOL);
             clickHandler.onClick(cursor.getString(symbolColumn));
 
         }
-
 
     }
 }

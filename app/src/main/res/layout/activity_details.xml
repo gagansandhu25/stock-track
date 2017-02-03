@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="--"
+
+                android:id="@+id/stockCompanyNameLabel"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"/>
+
+        </android.support.v7.widget.Toolbar>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="TSLA"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+
+
+            android:id="@+id/stockNameLabel"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Current Price"
+
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"
+            android:textColor="#ff555555"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="325.25"
+            android:id="@+id/stockPriceLabel"
+            android:textSize="45sp"
+            android:layout_marginTop="-5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+
+
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"/>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="15dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="-8.52"
+                android:id="@+id/stockChangeLabel"
+                android:textSize="14sp"
+                android:layout_marginRight="5dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_red_700"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="(-0.52%)"
+                android:id="@+id/stockPercentChangeLabel"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_red_700"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+
+
+
+</LinearLayout>
+</ScrollView>
