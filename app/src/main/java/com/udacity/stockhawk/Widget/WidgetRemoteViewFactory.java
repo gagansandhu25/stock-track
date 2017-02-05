@@ -2,11 +2,17 @@ package com.udacity.stockhawk.Widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Binder;
+import android.os.Bundle;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.data.Contract;
 
 import java.util.ArrayList;
 
@@ -18,6 +24,7 @@ public class WidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
     private static final String TAG = "WidgetRemoteViewFactory";
     private ArrayList<String> mResults = new ArrayList<>();
     private Context mContext;
+    private Cursor mCursor;
 
     public WidgetRemoteViewFactory(Context applicationContext, Intent intent) {
         mContext = applicationContext;
@@ -25,33 +32,67 @@ public class WidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onCreate() {
-        for (int i = 1; i <= 10; i++) {
-            mResults.add("Row: " + i);
-        }
+
     }
 
     @Override
     public void onDataSetChanged() {
-        for (int i = 1; i <= 10; i++) {
-            mResults.add("Row: " + i);
+
+        if (mCursor != null) {
+            mCursor.close();
         }
+        // This method is called by the app hosting the widget (e.g., the launcher)
+        // However, our ContentProvider is not exported so it doesn't have access to the
+        // data. Therefore we need to clear (and finally restore) the calling identity so
+        // that calls use our process and permission
+        final long identityToken = Binder.clearCallingIdentity();
+        Uri weatherForLocationUri = Contract.Quote.URI;
+        mCursor = mContext.getContentResolver().query(weatherForLocationUri,
+                null,
+                null,
+                null,
+                Contract.Quote._ID + " ASC");
+
+        Log.d(TAG, "onDataSetChanged: " + mCursor);
+
+        Binder.restoreCallingIdentity(identityToken);
+        
     }
 
     @Override
     public void onDestroy() {
-
+        if (mCursor != null) {
+            mCursor.close();
+        }
     }
 
     @Override
     public int getCount() {
-        return mResults.size();
+        return mCursor == null ? 0 : mCursor.getCount();
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
-        Log.d(TAG, "getViewAt: " + mResults.get(position));
+        if (position == AdapterView.INVALID_POSITION ||
+                mCursor == null || !mCursor.moveToPosition(position)) {
+            return null;
+        }
+
+        //Log.d(TAG, "getViewAt: " + mResults.get(position));
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
-        rv.setTextViewText(R.id.widgetItemStockNameLabel, mResults.get(position));
+        rv.setTextViewText(R.id.widgetItemStockNameLabel, mCursor.getString(1));
+        rv.setTextViewText(R.id.widgetItemStockPriceLabel, mCursor.getString(2));
+
+
+        Bundle extras = new Bundle();
+        extras.putString(WidgetProvider.EXTRA_SYMBOL, mCursor.getString(1));
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtras(extras);
+        // Make it possible to distinguish the individual on-click
+        // action of a given item
+        rv.setOnClickFillInIntent(R.id.widgetItemContainer, fillInIntent);
+
+
         return rv;
     }
 
@@ -67,11 +108,11 @@ public class WidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return mCursor.moveToPosition(position) ? mCursor.getLong(Contract.Quote.POSITION_ID) : position;
     }
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 }
