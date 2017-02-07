@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.udacity.stockhawk.Models.QuoteHistory;
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.data.Const;
 import com.udacity.stockhawk.ui.DetailsActivity;
 
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ public class QuoteIntentService extends IntentService {
 
     private static final String TAG = "QuoteIntentService";
     private String mAction;
-    private String mIntentUpdate = "UPDATE_DETAILS_ACTIVITY";
 
     public QuoteIntentService() {
         super(QuoteIntentService.class.getSimpleName());
@@ -38,10 +38,11 @@ public class QuoteIntentService extends IntentService {
         Timber.d("Intent handled");
         mAction = intent.getAction();
 
-        String symbol = intent.getStringExtra("SYMBOL");
+        String symbol = intent.getStringExtra(Const.EXTRA_SYMBOL);
+        String timeFrame = intent.getStringExtra(Const.EXTRA_TIME_FRAME);
 
-        if(mAction != null && mAction.equals("GET_HISTORY")) {
-            QuoteSyncJob.getQuoteHistory(getApplicationContext(), symbol);
+        if(mAction != null && mAction.equals(Const.ACTION_GET_HISTORY)) {
+            QuoteSyncJob.getQuoteHistory(getApplicationContext(), symbol, timeFrame);
         } else {
             QuoteSyncJob.getQuotes(getApplicationContext());
         }

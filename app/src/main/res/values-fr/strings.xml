@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_title">Ajouter des stocks</string>
+    <string name="dialog_hint">symbole (par exemple GOOG)</string>
+    <string name="dialog_cancel">Annuler</string>
+    <string name="dialog_add">Ajouter</string>
+
+
+    <string name="error_no_network">Pas de connectivité réseau! Charge le curseur stock lorsque le réseau est disponible.</string>
+    <string name="error_no_stocks">Aucun stock ajouté! Cliquez sur le bouton d\'action flottante pour en ajouter un.</string>
+
+    <string name="toast_stock_added_no_connectivity">Symbole% s ajouté. Rafraîchira lorsque le réseau est disponible.</string>
+
+    <string name="current_price">prix actuel</string>
+
+    <string name="toast_no_connectivity">Rafraîchira lorsque le réseau est disponible.</string>
+    <string name="empty_stock_list">Aucun stock disponible.</string>
+    <string name="widget_cd">Widget Content Description</string>
+    <string name="cd_add_stock">Ajouter des stocks</string>
+    <string name="cd_one_week">Une semaine</string>
+    <string name="cd_one_month">Un mois</string>
+    <string name="cd_three_months">Trois mois</string>
+    <string name="cd_six_months">Six mois</string>
+    <string name="cd_one_year">Un ans</string>
+</resources>

@@ -17,15 +17,17 @@ public class QuoteHistory implements Parcelable {
 
     private Float mHigh;
     private Float mLow;
-    private Calendar mDate;
+    private String mDate;
     private String mFormattedDate;
 
     public String getFormattedDate() {
         //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-DD");
         //Date newDate = format.parse(mDate.getTime().toString());
 
-        SimpleDateFormat date = new SimpleDateFormat("dd MMM yyyy");
-        mFormattedDate = date.format(mDate.getTime());
+        SimpleDateFormat date = new SimpleDateFormat("dd MMM");
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(Long.parseLong(mDate));
+        mFormattedDate = date.format(cal.getTime());
         return mFormattedDate;
 
     }
@@ -34,11 +36,11 @@ public class QuoteHistory implements Parcelable {
         mFormattedDate = formattedDate;
     }
 
-    public Calendar getDate() {
+    public String getDate() {
         return mDate;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(String date) {
         mDate = date;
     }
 
@@ -59,7 +61,7 @@ public class QuoteHistory implements Parcelable {
     }
 
 
-    public QuoteHistory(float a, float b, Calendar date) {
+    public QuoteHistory(float a, float b, String date) {
         setHigh(a);
         setLow(b);
         setDate(date);
@@ -68,7 +70,7 @@ public class QuoteHistory implements Parcelable {
     protected QuoteHistory(Parcel in) {
         mHigh = (Float) in.readValue(BigDecimal.class.getClassLoader());
         mLow = (Float) in.readValue(BigDecimal.class.getClassLoader());
-        mDate = (Calendar) in.readValue(Calendar.class.getClassLoader());
+        mDate = (String) in.readValue(String.class.getClassLoader());
     }
 
     @Override

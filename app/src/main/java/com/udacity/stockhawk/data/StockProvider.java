@@ -11,11 +11,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 
 public class StockProvider extends ContentProvider {
 
     private static final int QUOTE = 100;
     private static final int QUOTE_FOR_SYMBOL = 101;
+    private static final int QUOTE_HISTORY = 200;
+    private static final int QUOTE_HISTORY_FOR_SYMBOL = 201;
 
     private static final UriMatcher uriMatcher = buildUriMatcher();
     private static final String TAG = "StockProvider";
@@ -26,6 +32,8 @@ public class StockProvider extends ContentProvider {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(Contract.AUTHORITY, Contract.PATH_QUOTE, QUOTE);
         matcher.addURI(Contract.AUTHORITY, Contract.PATH_QUOTE_WITH_SYMBOL, QUOTE_FOR_SYMBOL);
+        matcher.addURI(Contract.AUTHORITY, Contract.PATH_QUOTE_HISTORY, QUOTE_HISTORY);
+        matcher.addURI(Contract.AUTHORITY, Contract.PATH_QUOTE_HISTORY_WITH_SYMBOL, QUOTE_HISTORY_FOR_SYMBOL);
         return matcher;
     }
 
@@ -41,6 +49,8 @@ public class StockProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor returnCursor;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Log.d(TAG, "query: " + uri.toString());
 
         switch (uriMatcher.match(uri)) {
             case QUOTE:
@@ -61,6 +71,19 @@ public class StockProvider extends ContentProvider {
                         projection,
                         Contract.Quote.COLUMN_SYMBOL + " = ?",
                         new String[]{Contract.Quote.getStockFromUri(uri)},
+                        null,
+                        null,
+                        sortOrder
+                );
+
+                break;
+
+            case QUOTE_HISTORY_FOR_SYMBOL:
+                returnCursor = db.query(
+                        Contract.Quote.TABLE_NAME_HISTORY,
+                        null,
+                        Contract.Quote.COLUMN_HISTORY_NAME + " = ? AND " + Contract.Quote.COLUMN_HISTORY_DATE + " >= ? AND " + Contract.Quote.COLUMN_HISTORY_DATE + " <= ?",
+                        new String[]{Contract.Quote.getStockFromUri(uri), selectionArgs[0], selectionArgs[1]},
                         null,
                         null,
                         sortOrder
@@ -101,6 +124,14 @@ public class StockProvider extends ContentProvider {
                         values
                 );
                 returnUri = Contract.Quote.URI;
+                break;
+            case QUOTE_HISTORY:
+                db.insert(
+                        Contract.Quote.TABLE_NAME_HISTORY,
+                        null,
+                        values
+                );
+                returnUri = Contract.Quote.URI_HISTORY;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown URI:" + uri);
@@ -187,10 +218,34 @@ public class StockProvider extends ContentProvider {
                 }
 
                 return returnCount;
+            case QUOTE_HISTORY:
+                db.beginTransaction();
+                int returnCount1 = 0;
+                try {
+                    for (ContentValues value : values) {
+                        db.insert(
+                                Contract.Quote.TABLE_NAME_HISTORY,
+                                null,
+                                value
+                        );
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                Context context1 = getContext();
+                if (context1 != null) {
+                    context1.getContentResolver().notifyChange(uri, null);
+                }
+
+                return returnCount1;
             default:
                 return super.bulkInsert(uri, values);
         }
 
 
     }
+
+
 }

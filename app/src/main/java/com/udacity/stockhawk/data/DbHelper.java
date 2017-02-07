@@ -11,7 +11,7 @@ class DbHelper extends SQLiteOpenHelper {
 
 
     private static final String NAME = "StockHawk.db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 6;
 
 
     DbHelper(Context context) {
@@ -26,8 +26,20 @@ class DbHelper extends SQLiteOpenHelper {
                 + Quote.COLUMN_PRICE + " REAL NOT NULL, "
                 + Quote.COLUMN_ABSOLUTE_CHANGE + " REAL NOT NULL, "
                 + Quote.COLUMN_PERCENTAGE_CHANGE + " REAL NOT NULL, "
-                + Quote.COLUMN_HISTORY + " TEXT NOT NULL, "
+                + Quote.COLUMN_COMPANY_NAME + " TEXT NOT NULL, "
+                //+ Quote.COLUMN_HISTORY + " TEXT NOT NULL, "
                 + "UNIQUE (" + Quote.COLUMN_SYMBOL + ") ON CONFLICT REPLACE);";
+
+        db.execSQL(builder);
+
+
+        builder = "CREATE TABLE " + Quote.TABLE_NAME_HISTORY + " ("
+                + Quote._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Quote.COLUMN_HISTORY_NAME + " TEXT NOT NULL, "
+                + Quote.COLUMN_HISTORY_PRICE_HIGH + " REAL NOT NULL, "
+                + Quote.COLUMN_HISTORY_PRICE_LOW + " REAL NOT NULL, "
+                + Quote.COLUMN_HISTORY_DATE + " TEXT NOT NULL, "
+                + "UNIQUE (" + Quote.COLUMN_HISTORY_NAME + ", "  + Quote.COLUMN_HISTORY_DATE + ") ON CONFLICT REPLACE);";
 
         db.execSQL(builder);
 
@@ -37,6 +49,7 @@ class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL(" DROP TABLE IF EXISTS " + Quote.TABLE_NAME);
+        db.execSQL(" DROP TABLE IF EXISTS " + Quote.TABLE_NAME_HISTORY);
 
         onCreate(db);
     }

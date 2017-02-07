@@ -84,12 +84,8 @@ public class WidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
         rv.setTextViewText(R.id.widgetItemStockPriceLabel, mCursor.getString(2));
 
 
-        Bundle extras = new Bundle();
-        extras.putString(WidgetProvider.EXTRA_SYMBOL, mCursor.getString(1));
         Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
-        // Make it possible to distinguish the individual on-click
-        // action of a given item
+        fillInIntent.putExtra(WidgetProvider.EXTRA_SYMBOL, mCursor.getString(1));
         rv.setOnClickFillInIntent(R.id.widgetItemContainer, fillInIntent);
 
 

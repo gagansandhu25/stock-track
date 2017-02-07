@@ -4,12 +4,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-
-
+        <item name="android:homeAsUpIndicator">@drawable/left_arrow_small</item>
     </style>
 
     <style name="PercentChangeTextStyle">
@@ -25,5 +23,11 @@
     <style name="StockSymbolTextStyle">
         <item name="android:textSize">25sp</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ChartButton" parent="Widget.AppCompat.Button.Small">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:layout_height">10dp</item>
     </style>
 </resources>

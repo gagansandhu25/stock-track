@@ -6,7 +6,9 @@ import android.preference.PreferenceManager;
 
 import com.udacity.stockhawk.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -89,6 +91,17 @@ public final class PrefUtils {
         }
 
         editor.apply();
+    }
+
+
+
+
+    public static String makeReadableDate(Calendar date) {
+
+        SimpleDateFormat date1 = new SimpleDateFormat("dd MMM yyyy");
+        String d = date1.format(date.getTime());
+        return d;
+
     }
 
 }
